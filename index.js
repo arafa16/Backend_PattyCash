@@ -6,6 +6,7 @@ const StatusRouter = require('./routes/StatusRoute.js');
 const TypePengajuanRouter = require('./routes/TypePengajuanRoute.js');
 const AuthRouter = require('./routes/AuthRoute.js');
 const session = require('express-session');
+const SequelizeStore = require('connect-session-sequelize');
 const dotenv = require('dotenv');
 
 const app = express();
@@ -14,15 +15,22 @@ const db = require('./config/Database.js');
 
 dotenv.config();
 
-// (async()=>{
-//     await db.sync();
-// })();
+const sessionStore = SequelizeStore(session.Store);
+
+const store = new sessionStore({
+    db:db
+});
+
+(async()=>{
+    await db.sync();
+})();
 
 app.use(session({
     secret: process.env.SESS_SECRET,
     resave: false,
     proxy: false,
     saveUninitialized: false,
+    store:store,
     cookie: {
         httpOnly: true,
         secure: false,
@@ -33,7 +41,7 @@ app.use(session({
 //memberi akses frontend
 app.use(cors({
     credentials: false,
-    origin: 'http://localhost:3000'
+    origin: process.env.LINK_FRONTEND
 }));
 
 
@@ -44,7 +52,9 @@ app.use(StatusRouter);
 app.use(TypePengajuanRouter);
 app.use(AuthRouter);
 
+store.sync();
+
 //menentukan port aplikasi
-app.listen(5000, ()=>{
-    console.log(`server running at port 5000`);
+app.listen(process.env.PORT, ()=>{
+    console.log(`server running at port ${process.env.PORT}`);
 })

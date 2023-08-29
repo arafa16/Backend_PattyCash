@@ -6,3 +6,5 @@ const db = new sequelize('db_keuangan','root','password',{
 });
 
 module.exports = db;
+
+//uji coba git ke server

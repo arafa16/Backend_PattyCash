@@ -40,8 +40,9 @@ app.use(session({
 
 //memberi akses frontend
 app.use(cors({
-    credentials: false,
-    origin: process.env.LINK_FRONTEND
+    credentials: true,
+    origin: 'http://localhost:3000',
+    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE"]
 }));
 
 

@@ -40,7 +40,7 @@ app.use(session({
 
 //memberi akses frontend
 app.use(cors({
-    credentials: true,
+    credentials: false,
     origin: process.env.LINK_FRONTEND
 }));
 

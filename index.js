@@ -28,8 +28,8 @@ const store = new sessionStore({
 app.use(session({
     secret: process.env.SESS_SECRET,
     resave: false,
-    proxy: true,
-    saveUninitialized: true,
+    proxy: false,
+    saveUninitialized: false,
     store:store,
     cookie: {
         httpOnly: true,
@@ -41,7 +41,7 @@ app.use(session({
 //memberi akses frontend
 app.use(cors({
     credentials: true,
-    origin: 'http://localhost:4000',
+    origin: 'http://localhost:3000',
     methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE"]
 }));
 

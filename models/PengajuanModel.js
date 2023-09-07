@@ -20,11 +20,11 @@ const Pengajuan = db.define('pengajuan',{
         allowNull: false
     },
     expense: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: true
     },
     advance:{
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull:true
     },
     coa:{

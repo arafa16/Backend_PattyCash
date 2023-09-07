@@ -1,8 +1,23 @@
 const Pengajuan = require("../models/PengajuanModel.js");
+const Status = require("../models/StatusModel.js");
+const TypePengajuan = require("../models/TypePengajuanModel.js");
+const Users = require("../models/UserModel.js");
 
 const getPengajuans = async(req, res) => {
     try {
-        const response = await Pengajuan.findAll();
+        const response = await Pengajuan.findAll({
+            include:[
+                {
+                    model:Users
+                },
+                {
+                    model:TypePengajuan
+                },
+                {
+                    model:Status
+                }
+            ]
+        });
 
         return res.status(200).json(response);
     } catch (error) {

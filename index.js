@@ -21,19 +21,19 @@ const store = new sessionStore({
     db:db
 });
 
-(async()=>{
-    await db.sync();
-})();
+// (async()=>{
+//     await db.sync();
+// })();
 
 app.use(session({
     secret: process.env.SESS_SECRET,
     resave: false,
-    proxy: false,
-    saveUninitialized: false,
+    // proxy: false,
+    saveUninitialized: true,
     store:store,
     cookie: {
-        httpOnly: true,
-        secure: false,
+        // httpOnly: true,
+        secure: 'auto',
         maxAge: 1000 * 60 * 60
     }
 }));
@@ -41,8 +41,8 @@ app.use(session({
 //memberi akses frontend
 app.use(cors({
     credentials: true,
-    origin: 'http://localhost:3000',
-    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE"]
+    origin: 'http://localhost:4000',
+    // methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE"]
 }));
 
 
@@ -53,7 +53,7 @@ app.use(StatusRouter);
 app.use(TypePengajuanRouter);
 app.use(AuthRouter);
 
-store.sync();
+// store.sync();
 
 //menentukan port aplikasi
 app.listen(process.env.PORT, ()=>{

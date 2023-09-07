@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const Users = require("../models/UserModel.js");
 const argon = require("argon2");
 
@@ -28,7 +29,9 @@ const getMe = async(req, res) => {
     if(!req.session.userId) return res.status(401).json({msg: "Access Denied"});
 
     const user = await Users.findOne({
-        uuid:req.session.userId
+        where:{
+            uuid:req.session.userId
+        }
     });
 
     if(!user) return res.status(401).json({msg: "Access Denied"});

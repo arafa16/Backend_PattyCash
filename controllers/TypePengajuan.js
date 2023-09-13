@@ -40,7 +40,11 @@ const createTypePengajuan = async(req, res) => {
 
 const updateTypePengajuan = async(req, res) => {
     const {name, code} = req.body;
-    const findType = await TypePengajuan.findOne();
+    const findType = await TypePengajuan.findOne({
+        where:{
+            uuid:req.params.id
+        }
+    });
 
     if(!findType) return res.status(404).json({msg: "not found"});
 

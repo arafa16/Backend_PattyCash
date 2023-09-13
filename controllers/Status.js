@@ -1,8 +1,16 @@
+const Pengajuan = require("../models/PengajuanModel.js");
 const Status = require("../models/StatusModel.js");
 
 const getStatus = async(req, res) => {
     try {
-        const response = await Status.findAll();
+        const response = await Status.findAll({
+            include:{
+                model:Pengajuan
+            },
+            order:[
+                ['id', 'ASC']
+            ]
+        });
 
         return res.status(200).json(response);
     } catch (error) {

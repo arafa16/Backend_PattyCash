@@ -1,9 +1,54 @@
 const argon = require('argon2');
 const Users = require("../models/UserModel.js");
+const { Op } = require('sequelize');
 
 const getUsers = async(req, res) =>{
     try {
         const response = await Users.findAll();
+
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({msg: error});
+    }
+}
+
+const getUsersPage = async(req, res) =>{
+    const limit = parseInt(req.params.limit);
+    const page = parseInt(req.params.page);
+
+    const offset = (page - 1) * limit;
+
+    console.log('sampai di page search');
+
+    try {
+        const response = await Users.findAndCountAll({
+            limit:limit,
+            offset:offset
+        });
+
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({msg: error});
+    }
+}
+
+const getUsersPageStatus = async(req, res) =>{
+    const limit = parseInt(req.params.limit);
+    const page = parseInt(req.params.page);
+    const status = req.params.status;
+
+    const offset = (page - 1) * limit;
+
+    console.log(status, 'sampai di page status');
+
+    try {
+        const response = await Users.findAndCountAll({
+            limit:limit,
+            offset:offset,
+            where:{
+                isActive:status
+            }
+        });
 
         return res.status(200).json(response);
     } catch (error) {
@@ -33,6 +78,24 @@ const createUser = async(req, res) => {
             name:name,
             email:email,
             password:hasPassword
+        });
+
+        return res.status(201).json({msg: "creat success"});
+    } catch (error) {
+        return res.status(500).json({msg: error});
+    }
+}
+
+const createUserFromAdmin = async(req, res) => {
+    const {name, email, password, isAdmin, isActive} = req.body;
+    const hasPassword = await argon.hash(password);
+    try {
+        await Users.create({
+            name:name,
+            email:email,
+            password:hasPassword,
+            isAdmin:isAdmin,
+            isActive:isActive
         });
 
         return res.status(201).json({msg: "creat success"});
@@ -85,8 +148,11 @@ const deleteUser = async(req, res) =>{
 
 module.exports = {
     getUsers,
+    getUsersPage,
+    getUsersPageStatus,
     getUserById,
     createUser,
+    createUserFromAdmin,
     updateUser,
     deleteUser
 }

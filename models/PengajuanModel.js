@@ -47,6 +47,14 @@ const Pengajuan = db.define('pengajuan',{
         type: DataTypes.DECIMAL(30),
         allowNull:false
     },
+    reference:{
+        type: DataTypes.TEXT,
+        allowNull:false
+    },
+    keterangan:{
+        type: DataTypes.TEXT,
+        allowNull:true
+    },
     typePengajuanId:{
         type: DataTypes.INTEGER,
         allowNull:false

@@ -1,8 +1,13 @@
+const Pengajuan = require('../models/PengajuanModel.js');
 const TypePengajuan = require('../models/TypePengajuanModel.js');
 
 const getTypePengajuans = async(req, res) => {
     try {
-        const response = await TypePengajuan.findAll();
+        const response = await TypePengajuan.findAll({
+            include:{
+                model:Pengajuan
+            }
+        });
 
         return res.status(200).json(response);
     } catch (error) {

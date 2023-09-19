@@ -24,6 +24,10 @@ const Users = db.define('users',{
         type: DataTypes.STRING,
         allowNull:false
     },
+    isAdmin: {
+        type: DataTypes.BOOLEAN,
+        defaultValue:false
+    },
     isActive: {
         type: DataTypes.BOOLEAN,
         defaultValue:false

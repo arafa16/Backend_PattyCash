@@ -300,6 +300,15 @@ const getPengajuansPageSearch = async(req, res) => {
 const getPengajuanById = async(req, res) => {
     try {
         const response = await Pengajuan.findOne({
+            include:[
+                {
+                    model:Status
+                },{
+                    model:TypePengajuan
+                },{
+                    model:Users
+                }
+            ],
             where:{
                 uuid:req.params.id
             }
@@ -314,8 +323,9 @@ const getPengajuanById = async(req, res) => {
 const getPengajuanByUser = async(req, res) => {
     const limit = parseInt(req.params.limit);
     const page = parseInt(req.params.page);
+    const search = req.params.search;
     const offset = (page - 1) * limit;
-    
+
     const findUser = await Users.findOne({
         where:{
             uuid:req.params.id
@@ -341,7 +351,56 @@ const getPengajuanByUser = async(req, res) => {
             ],
             where:{
                 userId:findUser.id
-            }
+            },
+            order:[
+                ['id', 'DESC']
+            ]
+        });
+
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json(error);
+    }
+}
+
+const getPengajuanByUserSearch = async(req, res) => {
+    const limit = parseInt(req.params.limit);
+    const page = parseInt(req.params.page);
+    const search = req.params.search;
+    const offset = (page - 1) * limit;
+
+    const findUser = await Users.findOne({
+        where:{
+            uuid:req.params.id
+        }
+    });
+
+    if(!findUser) return res.status(404).json({msg: "not found"});
+    
+    try {
+        const response = await Pengajuan.findAndCountAll({
+            limit:limit,
+            offset:offset,
+            include:[
+                {
+                    model:Users
+                },
+                {
+                    model:TypePengajuan
+                },
+                {
+                    model:Status
+                }
+            ],
+            where:{
+                userId:findUser.id,
+                id:{
+                    [Op.like]:`%${search}%`
+                }
+            },
+            order:[
+                ['id', 'DESC']
+            ]
         });
 
         return res.status(200).json(response);
@@ -351,7 +410,23 @@ const getPengajuanByUser = async(req, res) => {
 }
 
 const createPengajuan = async(req, res) => {
-    const {tanggal, expense, advance, coa, costCenter, analiticAccount, debit, credit, typePengajuanId, userId, statusId} = req.body;
+    const {
+        tanggal, 
+        expense, 
+        advance, 
+        coa, 
+        costCenter, 
+        analiticAccount, 
+        debit, 
+        credit,
+        reference,
+        keterangan, 
+        typePengajuanId, 
+        userId, 
+        statusId
+    } = req.body;
+
+    if(!typePengajuanId | !userId) return res.status(404).json({msg: 'type pengajuan dan nama user harus di isi'});
 
     try {
         await Pengajuan.create({
@@ -363,6 +438,8 @@ const createPengajuan = async(req, res) => {
             analiticAccount:analiticAccount,
             debit:debit,
             credit:credit,
+            reference:reference,
+            keterangan:keterangan,
             typePengajuanId:typePengajuanId,
             userId:userId,
             statusId:statusId
@@ -375,7 +452,21 @@ const createPengajuan = async(req, res) => {
 }
 
 const updatePengajuan = async(req, res) => {
-    const {tanggal, expense, advance, coa, costCenter, analiticAccount, debit, credit, typePengajuanId, userId, statusId} = req.body;
+    const {
+        tanggal, 
+        expense, 
+        advance, 
+        coa, 
+        costCenter, 
+        analiticAccount, 
+        debit, 
+        credit,
+        reference,
+        keterangan, 
+        typePengajuanId, 
+        userId, 
+        statusId
+    } = req.body;
 
     const findPengajuan = await Pengajuan.findOne({
         where:{
@@ -395,6 +486,8 @@ const updatePengajuan = async(req, res) => {
             analiticAccount:analiticAccount,
             debit:debit,
             credit:credit,
+            reference,
+            keterangan,
             typePengajuanId:typePengajuanId,
             userId:userId,
             statusId:statusId
@@ -433,5 +526,6 @@ module.exports = {
     deletePengajuan,
     getPengajuansPage,
     getPengajuansPageSearch,
-    getPengajuanByUser
+    getPengajuanByUser,
+    getPengajuanByUserSearch
 }

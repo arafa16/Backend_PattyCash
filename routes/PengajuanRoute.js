@@ -11,8 +11,10 @@ router.post('/pengajuans', PengajuanController.createPengajuan);
 router.patch('/pengajuans/:id', PengajuanController.updatePengajuan);
 router.delete('/pengajuans/:id', PengajuanController.deletePengajuan);
 
+
 //get with pengajuan
 router.get('/pengajuan/:id', PengajuanController.getPengajuanById);
+router.get('/pengajuan/:id&:limit&:page&:search/user', PengajuanController.getPengajuanByUserSearch);
 router.get('/pengajuan/:id&:limit&:page/user', PengajuanController.getPengajuanByUser);
 
 

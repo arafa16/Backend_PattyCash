@@ -18,11 +18,35 @@ const getStatus = async(req, res) => {
     }
 }
 
+const getStatusSelect = async(req, res) => {
+    try {
+        const response = await Status.findAll();
+
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({msg: error});
+    }
+}
+
 const getStatusById = async(req, res) => {
     try {
         const response = await Status.findOne({
             where:{
                 uuid:req.params.id
+            }
+        });
+
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({msg: error});
+    }
+}
+
+const getStatusByCode = async(req, res) => {
+    try {
+        const response = await Status.findOne({
+            where:{
+                code:req.params.id
             }
         });
 
@@ -90,7 +114,9 @@ const deleteStatus = async(req, res) => {
 module.exports = {
     getStatus,
     getStatusById,
+    getStatusByCode,
     createStatus,
     updateStatus,
-    deleteStatus
+    deleteStatus,
+    getStatusSelect
 }

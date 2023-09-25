@@ -1,8 +1,12 @@
 const Pengajuan = require("../models/PengajuanModel.js");
 const Status = require("../models/StatusModel.js");
 const TypePengajuan = require("../models/TypePengajuanModel.js");
+const Ptjb = require("../models/PtjbModel.js");
 const Users = require("../models/UserModel.js");
 const {Op} = require('sequelize');
+const Coa = require("../models/CoaModel.js");
+const AnnalitictAccout = require("../models/AnnaliticAccountModel.js");
+const CostCenter = require("../models/CostCenterModel.js");
 
 const getPengajuans = async(req, res) => {
     try {
@@ -307,6 +311,16 @@ const getPengajuanById = async(req, res) => {
                     model:TypePengajuan
                 },{
                     model:Users
+                },{
+                    model:Coa
+                },
+                {
+                    model:AnnalitictAccout
+                },
+                {
+                    model:CostCenter
+                },{
+                    model:Ptjb
                 }
             ],
             where:{
@@ -414,9 +428,9 @@ const createPengajuan = async(req, res) => {
         tanggal, 
         expense, 
         advance, 
-        coa, 
-        costCenter, 
-        analiticAccount, 
+        coaId, 
+        costCenterId, 
+        annaliticAccountId, 
         debit, 
         credit,
         reference,
@@ -433,9 +447,9 @@ const createPengajuan = async(req, res) => {
             tanggal:tanggal,
             expense:expense,
             advance:advance,
-            coa:coa,
-            costCenter:costCenter,
-            analiticAccount:analiticAccount,
+            coaId:coaId,
+            costCenterId:costCenterId,
+            annaliticAccountId:annaliticAccountId,
             debit:debit,
             credit:credit,
             reference:reference,
@@ -474,7 +488,15 @@ const updatePengajuan = async(req, res) => {
         }
     });
 
+    const findStatus = await Status.findOne({
+        where:{
+            code:statusId
+        }
+    });
+
     if(!findPengajuan) return res.status(404).json({msg: "not found"});
+
+    if(!findStatus) return res.status(404).json({msg: "status not found"});
 
     try {
         await findPengajuan.update({
@@ -490,7 +512,7 @@ const updatePengajuan = async(req, res) => {
             keterangan,
             typePengajuanId:typePengajuanId,
             userId:userId,
-            statusId:statusId
+            statusId:findStatus.id
         });
 
         return res.status(200).json({msg: "success"});

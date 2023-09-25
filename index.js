@@ -5,6 +5,10 @@ const PengajuanRouter = require('./routes/PengajuanRoute.js');
 const StatusRouter = require('./routes/StatusRoute.js');
 const TypePengajuanRouter = require('./routes/TypePengajuanRoute.js');
 const AuthRouter = require('./routes/AuthRoute.js');
+const CoaRouter = require('./routes/CoaRoute.js');
+const CostCenterRouter = require('./routes/CostCenterRoute.js');
+const AnnaliticAccount = require('./routes/AnnaliticAccountRoute.js');
+const Ptjb = require('./routes/PtjbRoute.js');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize');
 const dotenv = require('dotenv');
@@ -20,6 +24,8 @@ const sessionStore = SequelizeStore(session.Store);
 const store = new sessionStore({
     db:db
 });
+
+
 
 // (async()=>{
 //     await db.sync();
@@ -45,13 +51,16 @@ app.use(cors({
     // methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE"]
 }));
 
-
 app.use(express.json());
 app.use(UserRouter);
 app.use(PengajuanRouter);
 app.use(StatusRouter);
 app.use(TypePengajuanRouter);
 app.use(AuthRouter);
+app.use(CoaRouter);
+app.use(CostCenterRouter);
+app.use(AnnaliticAccount);
+app.use(Ptjb);
 
 // store.sync();
 

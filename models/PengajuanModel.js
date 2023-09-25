@@ -3,6 +3,9 @@ const db = require('../config/Database.js');
 const User = require('./UserModel.js');
 const TypePengajuan = require('./TypePengajuanModel.js');
 const Status = require('./StatusModel.js');
+const Coa = require('./CoaModel.js');
+const CostCenter = require('./CostCenterModel.js');
+const AnnalitictAccout = require('./AnnaliticAccountModel.js');
 
 const {DataTypes} = sequelize;
 
@@ -27,16 +30,16 @@ const Pengajuan = db.define('pengajuan',{
         type: DataTypes.STRING,
         allowNull:true
     },
-    coa:{
-        type: DataTypes.STRING,
+    coaId:{
+        type: DataTypes.INTEGER,
         allowNull:false
     },
-    costCenter:{
-        type: DataTypes.STRING,
+    costCenterId:{
+        type: DataTypes.INTEGER,
         allowNull:false
     },
-    analiticAccount:{
-        type: DataTypes.STRING,
+    annaliticAccountId:{
+        type: DataTypes.INTEGER,
         allowNull:false
     },
     debit:{
@@ -81,5 +84,14 @@ Pengajuan.belongsTo(TypePengajuan, {foreignKey: 'typePengajuanId'});
 
 Status.hasMany(Pengajuan);
 Pengajuan.belongsTo(Status, {foreignKey: 'statusId'});
+
+Coa.hasMany(Pengajuan);
+Pengajuan.belongsTo(Coa, {foreignKey: 'coaId'});
+
+CostCenter.hasMany(Pengajuan);
+Pengajuan.belongsTo(CostCenter, {foreignKey: 'costCenterId'});
+
+AnnalitictAccout.hasMany(Pengajuan);
+Pengajuan.belongsTo(AnnalitictAccout, {foreignKey: 'annaliticAccountId'});
 
 module.exports = Pengajuan;

@@ -105,8 +105,15 @@ const createUserFromAdmin = async(req, res) => {
 }
 
 const updateUser = async(req, res) => {
-    const {name, email, password} = req.body;
-    const hasPassword = await argon.hash(password);
+    const {
+        name, 
+        email, 
+        isActive,
+        isAdmin
+    } = req.body;
+
+    // const hasPassword = await argon.hash(password);
+
     try {
         const findUser = await Users.findOne({
             where:{
@@ -119,10 +126,38 @@ const updateUser = async(req, res) => {
         await findUser.update({
             name:name,
             email:email,
-            password:hasPassword
+            isActive:isActive,
+            isAdmin:isAdmin
+            // password:hasPassword
         })
         
         res.status(201).json({msg: "update success"});
+    } catch (error) {
+        res.status(500).json({msg: error});
+    }
+}
+
+const updatePassword = async(req, res) => {
+    const {
+        password
+    } = req.body;
+
+    const hasPassword = await argon.hash(password);
+
+    try {
+        const findUser = await Users.findOne({
+            where:{
+                uuid:req.params.id
+            }
+        });
+
+        if(!findUser) return res.status(404).json({msg: "user not found"});
+
+        await findUser.update({
+            password:hasPassword
+        })
+        
+        res.status(201).json({msg: "update password success"});
     } catch (error) {
         res.status(500).json({msg: error});
     }
@@ -154,5 +189,6 @@ module.exports = {
     createUser,
     createUserFromAdmin,
     updateUser,
+    updatePassword,
     deleteUser
 }

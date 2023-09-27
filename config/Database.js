@@ -9,5 +9,3 @@ const db = new sequelize(process.env.DATABASE_NAME, process.env.DATABASE_USER, p
 });
 
 module.exports = db;
-
-//uji coba git ke server

@@ -11,11 +11,15 @@ const Login = async(req, res) => {
         }
     });
 
+    console.log(findUser.isActive, "find user");
+
     if(!findUser) return res.status(404).json({msg: "email not found"});
 
     const match = await argon.verify(findUser.password, password);
 
     if(!match) return res.status(401).json({msg: "wrong password"});
+
+    if(!findUser.isActive) return res.status(401).json({msg: "user belum di falidate"});
 
     req.session.userId = findUser.uuid;
 

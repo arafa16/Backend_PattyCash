@@ -10,6 +10,7 @@ const verifyUser = async(req, res, next) => {
             uuid:req.session.userId
         }
     });
+    
     if(!user) return res.status(404).json({msg: "access denied"});
     req.userId = user.uuid;
     next();

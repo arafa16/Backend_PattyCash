@@ -9,6 +9,8 @@ const CoaRouter = require('./routes/CoaRoute.js');
 const CostCenterRouter = require('./routes/CostCenterRoute.js');
 const AnnaliticAccount = require('./routes/AnnaliticAccountRoute.js');
 const Ptjb = require('./routes/PtjbRoute.js');
+const Export = require('./routes/ExportRoute.js');
+
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize');
 const dotenv = require('dotenv');
@@ -61,6 +63,7 @@ app.use(CoaRouter);
 app.use(CostCenterRouter);
 app.use(AnnaliticAccount);
 app.use(Ptjb);
+app.use(Export);
 
 // store.sync();
 

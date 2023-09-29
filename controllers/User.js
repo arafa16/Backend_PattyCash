@@ -73,6 +73,26 @@ const getUserById = async(req, res) =>{
 const createUser = async(req, res) => {
     const {name, email, password} = req.body;
     const hasPassword = await argon.hash(password);
+
+    const cekUser = await Users.findAll();
+    console.log(cekUser.length, 'cek');
+    // return res.status(200).json(cekUser ? 'ada' : 'tidak ada');
+
+    if(cekUser.length === 0){
+        try {
+            await Users.create({
+                name:name,
+                email:email,
+                password:hasPassword,
+                isAdmin:1,
+                isActive:1
+            });
+            return res.status(201).json({msg: "Create Admin success"});
+        } catch (error) {
+            return res.status(500).json({msg: error});
+        }
+    }
+
     try {
         await Users.create({
             name:name,
@@ -80,7 +100,7 @@ const createUser = async(req, res) => {
             password:hasPassword
         });
 
-        return res.status(201).json({msg: "creat success"});
+        return res.status(201).json({msg: "create user success"});
     } catch (error) {
         return res.status(500).json({msg: error});
     }

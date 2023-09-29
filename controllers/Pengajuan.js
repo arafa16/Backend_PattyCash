@@ -470,9 +470,9 @@ const updatePengajuan = async(req, res) => {
         tanggal, 
         expense, 
         advance, 
-        coa, 
-        costCenter, 
-        analiticAccount, 
+        coaId, 
+        costCenterId, 
+        annaliticAccountId, 
         debit, 
         credit,
         reference,
@@ -488,13 +488,36 @@ const updatePengajuan = async(req, res) => {
         }
     });
 
+    if(!findPengajuan) return res.status(404).json({msg: "not found"});
+
+    if(!statusId){
+        try {
+            await findPengajuan.update({
+                tanggal:tanggal,
+                expense:expense,
+                advance:advance,
+                coaId:coaId,
+                costCenterId:costCenterId,
+                annaliticAccountId:annaliticAccountId,
+                debit:debit,
+                credit:credit,
+                reference,
+                keterangan,
+                typePengajuanId:typePengajuanId,
+                userId:userId
+            });
+    
+            return res.status(200).json({msg: "success"});
+        } catch (error) {
+            return res.status(500).json({msg: error});
+        }
+    }
+
     const findStatus = await Status.findOne({
         where:{
             code:statusId
         }
     });
-
-    if(!findPengajuan) return res.status(404).json({msg: "not found"});
 
     if(!findStatus) return res.status(404).json({msg: "status not found"});
 
@@ -503,9 +526,9 @@ const updatePengajuan = async(req, res) => {
             tanggal:tanggal,
             expense:expense,
             advance:advance,
-            coa:coa,
-            costCenter:costCenter,
-            analiticAccount:analiticAccount,
+            coaId:coaId,
+            costCenterId:costCenterId,
+            annaliticAccountId:annaliticAccountId,
             debit:debit,
             credit:credit,
             reference,

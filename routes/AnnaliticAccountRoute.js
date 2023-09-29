@@ -3,6 +3,8 @@ const AnnalitictAccoutController = require('../controllers/AnnaliticAccount');
 const router = express.Router();
 
 router.get('/annaliticAccount', AnnalitictAccoutController.getAnnaliticAccounts);
+router.get('/annaliticAccount/:limit&:page&:status', AnnalitictAccoutController.getAnnaliticAccountsPageByStatus);
+router.get('/annaliticAccount/:limit&:page', AnnalitictAccoutController.getAnnaliticAccountsPage);
 router.get('/annaliticAccount/:id', AnnalitictAccoutController.getAnnaliticAccountById);
 router.post('/annaliticAccount', AnnalitictAccoutController.createAnnaliticAccount);
 router.patch('/annaliticAccount/:id', AnnalitictAccoutController.updateAnnaliticAccount);

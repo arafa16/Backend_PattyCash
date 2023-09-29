@@ -11,7 +11,7 @@ const Login = async(req, res) => {
         }
     });
 
-    console.log(findUser.isActive, "find user");
+    // console.log(findUser.isActive, "find user");
 
     if(!findUser) return res.status(404).json({msg: "email not found"});
 

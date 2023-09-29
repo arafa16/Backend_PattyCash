@@ -10,6 +10,47 @@ const getAnnaliticAccounts = async(req, res) => {
     }
 }
 
+const getAnnaliticAccountsPage = async(req, res) => {
+    const limit = parseInt(req.params.limit);
+    const page = parseInt(req.params.page);
+    const status = parseInt(req.params.status);
+
+    const offset = (page - 1) * limit;
+
+    try {
+        const response = await AnnalitictAccout.findAndCountAll({
+            limit:limit,
+            offset:offset
+        });
+
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({msg: error});
+    }
+}
+
+const getAnnaliticAccountsPageByStatus = async(req, res) => {
+    const limit = parseInt(req.params.limit);
+    const page = parseInt(req.params.page);
+    const status = parseInt(req.params.status);
+
+    const offset = (page - 1) * limit;
+
+    try {
+        const response = await AnnalitictAccout.findAndCountAll({
+            limit:limit,
+            offset:offset,
+            where:{
+                isActive:status
+            }
+        });
+
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({msg: error});
+    }
+}
+
 const getAnnaliticAccountById = async(req, res) => {
     try {
         const response = await AnnalitictAccout.findOne({
@@ -88,5 +129,7 @@ module.exports = {
     createAnnaliticAccount,
     getAnnaliticAccountById,
     updateAnnaliticAccount,
-    deleteAnnaliticAccount
+    deleteAnnaliticAccount,
+    getAnnaliticAccountsPage,
+    getAnnaliticAccountsPageByStatus
 }

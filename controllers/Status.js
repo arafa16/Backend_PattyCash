@@ -18,6 +18,46 @@ const getStatus = async(req, res) => {
     }
 }
 
+const getStatusPage = async(req, res) => {
+    const limit = parseInt(req.params.limit);
+    const page = parseInt(req.params.page);
+
+    const offset = (page - 1) * limit;
+
+    try {
+        const response = await Status.findAndCountAll({
+            limit:limit,
+            offset:offset
+        });
+
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({msg: error});
+    }
+}
+
+const getStatusPageByStatus = async(req, res) => {
+    const limit = parseInt(req.params.limit);
+    const page = parseInt(req.params.page);
+    const status = parseInt(req.params.status);
+
+    const offset = (page - 1) * limit;
+
+    try {
+        const response = await Status.findAndCountAll({
+            limit:limit,
+            offset:offset,
+            where:{
+                isActive:status
+            }
+        });
+
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({msg: error});
+    }
+}
+
 const getStatusSelect = async(req, res) => {
     try {
         const response = await Status.findAll();
@@ -71,7 +111,7 @@ const createStatus = async(req, res) => {
 }
 
 const updateStatus = async(req, res) => {
-    const {name, code} = req.body;
+    const {name, code, isActive} = req.body;
 
     const findStatus = await Status.findOne({
         where:{
@@ -84,7 +124,8 @@ const updateStatus = async(req, res) => {
     try {
         await findStatus.update({
             name:name,
-            code:code
+            code:code,
+            isActive:isActive
         });
 
         return res.status(201).json({msg: "update success"});
@@ -118,5 +159,7 @@ module.exports = {
     createStatus,
     updateStatus,
     deleteStatus,
-    getStatusSelect
+    getStatusSelect,
+    getStatusPage,
+    getStatusPageByStatus
 }

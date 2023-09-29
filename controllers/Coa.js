@@ -10,6 +10,47 @@ const getCoa = async(req, res) => {
     }
 }
 
+const getCoaPage = async(req, res) => {
+    const limit = parseInt(req.params.limit);
+    const page = parseInt(req.params.page);
+    const status = parseInt(req.params.status);
+
+    const offset = (page - 1) * limit;
+
+    try {
+        const response = await Coa.findAndCountAll({
+            limit:limit,
+            offset:offset
+        });
+
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({msg: error})
+    }
+}
+
+const getCoaPageStatus = async(req, res) => {
+    const limit = parseInt(req.params.limit);
+    const page = parseInt(req.params.page);
+    const status = parseInt(req.params.status);
+
+    const offset = (page - 1) * limit;
+
+    try {
+        const response = await Coa.findAndCountAll({
+            limit:limit,
+            offset:offset,
+            where:{
+                isActive:status
+            }
+        });
+
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({msg: error})
+    }
+}
+
 const getCoaById = async(req, res) => {
     try {
         const response = await Coa.findOne({
@@ -84,5 +125,7 @@ module.exports = {
     getCoaById,
     createCoa,
     updateCoa,
-    deleteCoa
+    deleteCoa,
+    getCoaPage,
+    getCoaPageStatus
 }

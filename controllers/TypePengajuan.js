@@ -15,6 +15,46 @@ const getTypePengajuans = async(req, res) => {
     }
 }
 
+const getTypePengajuanPage = async(req, res) => {
+    const limit = parseInt(req.params.limit);
+    const page = parseInt(req.params.page);
+
+    const offset = (page - 1) * limit;
+
+    try {
+        const response = await TypePengajuan.findAndCountAll({
+            limit:limit,
+            offset:offset
+        });
+
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({msg: error});
+    }
+}
+
+const getTypePengajuanPageByStatus = async(req, res) => {
+    const limit = parseInt(req.params.limit);
+    const page = parseInt(req.params.page);
+    const status = parseInt(req.params.status);
+
+    const offset = (page - 1) * limit;
+    
+    try {
+        const response = await TypePengajuan.findAndCountAll({
+            limit:limit,
+            offset:offset,
+            where:{
+                isActive:status
+            }
+        });
+
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({msg: error});
+    }
+}
+
 const getTypePengajuanById = async(req, res) => {
     try {
         const response = await TypePengajuan.findOne({
@@ -30,11 +70,12 @@ const getTypePengajuanById = async(req, res) => {
 }
 
 const createTypePengajuan = async(req, res) => {
-    const {name, code} = req.body;
+    const {name, code, isActive} = req.body;
     try {
         const typePengajuan = await TypePengajuan.create({
             name:name,
-            code:code
+            code:code,
+            isActive:isActive
         });
 
         return res.status(201).json({msg: "create type success"})
@@ -44,7 +85,7 @@ const createTypePengajuan = async(req, res) => {
 }
 
 const updateTypePengajuan = async(req, res) => {
-    const {name, code} = req.body;
+    const {name, code, isActive} = req.body;
     const findType = await TypePengajuan.findOne({
         where:{
             uuid:req.params.id
@@ -56,7 +97,8 @@ const updateTypePengajuan = async(req, res) => {
     try {
         await findType.update({
             name:name,
-            code:code
+            code:code,
+            isActive:isActive
         });
 
         return res.status(200).json({msg: "update success"});
@@ -84,5 +126,7 @@ module.exports = {
     getTypePengajuanById,
     createTypePengajuan,
     updateTypePengajuan,
-    deleteTypePengajuan
+    deleteTypePengajuan,
+    getTypePengajuanPage,
+    getTypePengajuanPageByStatus
 }

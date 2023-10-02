@@ -47,7 +47,6 @@ app.use(session({
     }
 }));
 
-//memberi akses frontend
 app.use(cors({
     credentials: true,
     origin: [process.env.URL_ORIGIN, process.env.URL_ORIGIN_PUBLIC],

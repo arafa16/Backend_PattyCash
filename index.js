@@ -10,6 +10,7 @@ const CostCenterRouter = require('./routes/CostCenterRoute.js');
 const AnnaliticAccount = require('./routes/AnnaliticAccountRoute.js');
 const Ptjb = require('./routes/PtjbRoute.js');
 const Export = require('./routes/ExportRoute.js');
+const Reset = require('./routes/ResetRoute.js');
 
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize');
@@ -49,7 +50,7 @@ app.use(session({
 //memberi akses frontend
 app.use(cors({
     credentials: true,
-    origin: process.env.URL_ORIGIN,
+    origin: [process.env.URL_ORIGIN, process.env.URL_ORIGIN_PUBLIC],
     // methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE"]
 }));
 
@@ -64,6 +65,7 @@ app.use(CostCenterRouter);
 app.use(AnnaliticAccount);
 app.use(Ptjb);
 app.use(Export);
+app.use(Reset);
 
 // store.sync();
 

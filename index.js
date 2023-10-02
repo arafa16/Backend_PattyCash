@@ -29,7 +29,7 @@ const store = new sessionStore({
 });
 
 
-
+// buat database
 // (async()=>{
 //     await db.sync();
 // })();

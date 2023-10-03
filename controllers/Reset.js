@@ -1,6 +1,7 @@
 const Users = require("../models/UserModel.js");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const argon = require('argon2');
 
 const sendEmail = async(req, res) => {
     const {email} = req.body;
@@ -69,7 +70,40 @@ const verifyToken = async(req, res) => {
     }
 }
 
+const resetPassword = async(req, res) => {
+    const {token} = req.params;
+    const {password, confPassword} = req.body;
+    const secret = process.env.SESS_SECRET;
+
+    if(password !== confPassword) return res.status(400).json({msg: "password dosn't match"});
+
+    try {
+        const verify = jwt.verify(token, secret);
+
+        const findUser = await Users.findOne({
+            where:{
+                uuid: verify.id
+            }
+        });
+
+        console.log(findUser);
+
+        if(!findUser) return res.status(404).json({msg: "user not found"});
+
+        const hashPassword = await argon.hash(password);
+
+        await findUser.update({
+            password:hashPassword
+        });
+
+        res.status(200).json({msg: "change password success"});
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+
 module.exports = {
     sendEmail,
-    verifyToken
+    verifyToken,
+    resetPassword
 }

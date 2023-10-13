@@ -70,7 +70,8 @@ app.use(Reset);
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'https://cash.kopkarla.org');
+    // res.setHeader('Access-Control-Allow-Origin', 'https://cash.kopkarla.org');
+    res.setHeader('Access-Control-Allow-Origin', `${process.env.URL_ORIGIN}`);
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');

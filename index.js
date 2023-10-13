@@ -70,7 +70,6 @@ app.use(Reset);
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
-    // res.setHeader('Access-Control-Allow-Origin', 'https://cash.kopkarla.org');
     res.setHeader('Access-Control-Allow-Origin', `${process.env.URL_ORIGIN}`);
 
     // Request methods you wish to allow
@@ -79,7 +78,6 @@ app.use(function (req, res, next) {
     // Request headers you wish to allow
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
 
-    // Set to true if you need the website to include cookies in the requests sent
     // to the API (e.g. in case you use sessions)
     res.setHeader('Access-Control-Allow-Credentials', true);
 

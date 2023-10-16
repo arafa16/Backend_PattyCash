@@ -11,6 +11,8 @@ const AnnaliticAccount = require('./routes/AnnaliticAccountRoute.js');
 const Ptjb = require('./routes/PtjbRoute.js');
 const Export = require('./routes/ExportRoute.js');
 const Reset = require('./routes/ResetRoute.js');
+const AttachmentRoute = require('./routes/AttachmentRoute.js');
+const FileUpload = require('express-fileupload');
 
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize');
@@ -30,9 +32,9 @@ const store = new sessionStore({
 
 
 // buat database
-(async()=>{
-    await db.sync();
-})();
+// (async()=>{
+//     await db.sync();
+// })();
 
 app.use(session({
     secret: process.env.SESS_SECRET,
@@ -54,6 +56,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(FileUpload());
 app.use(UserRouter);
 app.use(PengajuanRouter);
 app.use(StatusRouter);
@@ -65,6 +68,9 @@ app.use(AnnaliticAccount);
 app.use(Ptjb);
 app.use(Export);
 app.use(Reset);
+app.use(AttachmentRoute);
+
+app.use(express.static('public'));
 
 // Add headers before the routes are defined
 app.use(function (req, res, next) {

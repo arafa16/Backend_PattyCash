@@ -7,6 +7,7 @@ const {Op} = require('sequelize');
 const Coa = require("../models/CoaModel.js");
 const AnnalitictAccout = require("../models/AnnaliticAccountModel.js");
 const CostCenter = require("../models/CostCenterModel.js");
+const Attachment = require("../models/AttachmentModel.js");
 
 const getPengajuans = async(req, res) => {
     try {
@@ -321,6 +322,8 @@ const getPengajuanById = async(req, res) => {
                     model:CostCenter
                 },{
                     model:Ptjb
+                },{
+                    model:Attachment
                 }
             ],
             where:{

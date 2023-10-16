@@ -32,9 +32,9 @@ const store = new sessionStore({
 
 
 // buat database
-(async()=>{
-    await db.sync();
-})();
+// (async()=>{
+//     await db.sync();
+// })();
 
 app.use(session({
     secret: process.env.SESS_SECRET,
